@@ -18,8 +18,8 @@
 # If you chose to pull from Docker Hub, comment the "build" lines and uncomment the "image" line.
 # If you chose to build the image from the Dockerfile, do the following:
 # uncomment this
-#       build:
-#           dockerfile: ./Dockerfile
+    # build:
+    #     dockerfile: ./Dockerfile
 # and comment this
 #       image: ghcr.io/choco/vocard:latest
 # example - `root@docker:/opt/vocard/config# wget https://github.com/ChocoMeow/Vocard/archive/refs/heads/main.zip`
@@ -63,22 +63,22 @@ services:
             timeout: 5s
             retries: 3
 
-    #mongo:
-    #    container_name: mongo
-    #    image: mongo:latest
-    #
-    #    restart: unless-stopped
-    #    volumes:
-    #        - ./data/mongo/db:/data/db
-    #        - ./data/mongo/conf:/data/configdb
-    #    environment:
-    #        - MONGO_INITDB_ROOT_USERNAME=admin
-    #        - MONGO_INITDB_ROOT_PASSWORD=admin
-    #    expose:
-    #        - "27017"
-    #    networks:
-    #        - vocard
-    #    command: ["mongod", "--oplogSize=1024", "--wiredTigerCacheSizeGB=1", "--auth", "--noscripting"]
+    mongo:
+       container_name: mongo
+       image: mongo:latest
+    
+       restart: unless-stopped
+       volumes:
+           - ./data/mongo/db:/data/db
+           - ./data/mongo/conf:/data/configdb
+       environment:
+           - MONGO_INITDB_ROOT_USERNAME=admin
+           - MONGO_INITDB_ROOT_PASSWORD=admin
+       expose:
+           - "27017"
+       networks:
+           - vocard
+       command: ["mongod", "--oplogSize=1024", "--wiredTigerCacheSizeGB=1", "--auth", "--noscripting"]
 
     vocard:
         container_name: vocard
@@ -94,8 +94,8 @@ services:
         depends_on:
             lavalink:
                 condition: service_healthy
-            # mongo:
-            #     condition: service_started
+            mongo:
+                condition: service_started
 
 networks:
     vocard:
